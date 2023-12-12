@@ -1,5 +1,4 @@
 import format from 'date-fns/format';
-import { useAtomValue } from 'jotai/utils';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { useBubbleBgColor } from '../../hooks/use-bubble-bg-color';
@@ -11,6 +10,7 @@ import {
 } from '../../state';
 import type { Message } from '../../types';
 import { Avatar } from './avatar';
+import { useAtomValue } from 'jotai';
 
 type IProps = PropsWithChildren<{
   message: Message;

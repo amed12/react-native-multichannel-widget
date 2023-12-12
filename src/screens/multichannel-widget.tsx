@@ -1,13 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PortalHost } from '@gorhom/portal';
-import { useAtomValue } from 'jotai/utils';
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';
 import { AttachmentMenu } from '../components/attachment-menu';
-import { Header } from '../components/header/index';
-import { useCurrentChatRoom } from '../hooks/use-current-chatroom';
-import { useQiscus } from '../hooks/use-qiscus';
+import { Header } from '../components/header';
+import { useCurrentChatRoom } from '../hooks';
+import { useQiscus } from '../hooks';
 import {
   baseColorThemeAtom,
   roomSubtitleTextAtom,
@@ -15,6 +14,7 @@ import {
 } from '../state';
 import { MessageForm } from './message-form';
 import { MessageList } from './message-list';
+import { useAtomValue } from 'jotai';
 
 type MultichannelWidgetProps = {
   onBack: () => void;

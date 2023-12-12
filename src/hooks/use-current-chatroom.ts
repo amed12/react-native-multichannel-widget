@@ -1,4 +1,3 @@
-import { useAtomValue } from 'jotai/utils';
 import { useEffect } from 'react';
 import { roomAtom } from '../state';
 import type { IUseCurrentChatRoom } from '../types';
@@ -7,6 +6,7 @@ import { useLoadMoreMessages } from './use-load-more-message';
 import { useMessages } from './use-messages';
 import { useQiscus } from './use-qiscus';
 import { useSendMessage } from './use-send-message';
+import { useAtomValue } from 'jotai';
 
 export function useCurrentChatRoom(): IUseCurrentChatRoom {
   const qiscus = useQiscus();

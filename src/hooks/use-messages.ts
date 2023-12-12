@@ -1,6 +1,6 @@
-import { useAtomValue } from 'jotai/utils';
 import { useMemo } from 'react';
 import { messagesAtom, roomIdAtom } from '../state';
+import { useAtomValue } from 'jotai';
 
 export function useMessages() {
   const messages_ = useAtomValue(messagesAtom);

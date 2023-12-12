@@ -1,4 +1,3 @@
-import { useAtomValue } from 'jotai/utils';
 import React, { useState } from 'react';
 import {
   Image,
@@ -13,6 +12,7 @@ import {
   sendContainerBackgroundColorThemeAtom,
   sendContainerColorThemeAtom,
 } from '../state';
+import { useAtomValue } from 'jotai';
 
 type MessageFormProps = {
   onTapAddAttachment: () => void;

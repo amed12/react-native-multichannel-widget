@@ -1,6 +1,5 @@
 import { atom } from 'jotai';
 import { atomWithReset } from 'jotai/utils';
-import { atomWithImmer } from 'jotai/immer';
 import QiscusSDK from 'qiscus-sdk-javascript';
 import type {
   Account,
@@ -9,6 +8,7 @@ import type {
   Room,
   SetupOptions,
 } from './types';
+import { atomWithImmer } from 'jotai-immer';
 
 export const qiscus = new QiscusSDK();
 export const qiscusAtom = atom<QiscusSDK>(() => qiscus);

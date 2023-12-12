@@ -1,6 +1,5 @@
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
-import { useAtomValue } from 'jotai/utils';
 import _, { orderBy } from 'lodash';
 import React, { useCallback, useMemo } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
@@ -10,6 +9,7 @@ import { MessageItemCarousel } from './message-item/carousel';
 import { MessageItemImage } from './message-item/image';
 import { MessageItemSystemEvent } from './message-item/system-event';
 import { MessageItemText } from './message-item/text';
+import { useAtomValue } from 'jotai';
 
 type MessageListProps = {
   messages: Array<Message>;

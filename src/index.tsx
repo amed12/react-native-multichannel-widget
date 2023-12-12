@@ -1,7 +1,6 @@
 import { PortalProvider } from '@gorhom/portal';
 import invariant from 'invariant';
-import { Provider } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
+import { Provider, useSetAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import { appIdAtom } from './state';
 export { Header } from './components/header/index';
@@ -44,7 +43,7 @@ function WidgetProvider(props: IWidgetProviderProps) {
   const appId = props.appId;
   invariant(appId, 'MultichannelWidgetProvider must have `appId` as a prop');
 
-  const setAppId = useUpdateAtom(appIdAtom);
+  const setAppId = useSetAtom(appIdAtom);
   useEffect(() => {
     setAppId(appId);
   }, [appId, setAppId]);

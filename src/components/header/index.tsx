@@ -1,4 +1,3 @@
-import { useAtomValue } from 'jotai/utils';
 import * as React from 'react';
 import { useMemo } from 'react';
 import {
@@ -23,6 +22,7 @@ import {
   typingStatusAtom,
 } from '../../state';
 import { IRoomSubtitleConfig } from '../../types';
+import { useAtomValue } from 'jotai';
 
 type IProps = {
   height?: number;

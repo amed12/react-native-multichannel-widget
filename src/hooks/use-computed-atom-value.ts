@@ -1,5 +1,4 @@
-import { atom, Getter, useAtom } from 'jotai';
-import { useAtomValue } from 'jotai/utils';
+import { atom, Getter, useAtom, useAtomValue } from 'jotai';
 
 export function useComputedAtomValue<R>(cb: (get: Getter) => R) {
   return useAtomValue(atom(cb));
