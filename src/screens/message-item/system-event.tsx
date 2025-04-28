@@ -1,11 +1,10 @@
-import React from 'react';
+import { useAtomValue } from 'jotai/utils';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   roomSystemEventHiddenAtom,
   timeLabelTextColorThemeAtom,
 } from '../../state';
 import type { Message } from '../../types';
-import { useAtomValue } from 'jotai';
 
 type MessageItemSystemEventProps = {
   item: Message;

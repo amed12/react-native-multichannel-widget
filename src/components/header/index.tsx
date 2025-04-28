@@ -1,15 +1,9 @@
-import * as React from 'react';
+import { useAtomValue } from 'jotai/utils';
 import { useMemo } from 'react';
-import {
-  Image,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useComputedAtomValue } from '../../hooks/use-computed-atom-value';
+import IcArrowLeft from '../../icons/arrow-left';
 import {
   currentUserAtom,
   navigationColorThemeAtom,
@@ -22,7 +16,6 @@ import {
   typingStatusAtom,
 } from '../../state';
 import { IRoomSubtitleConfig } from '../../types';
-import { useAtomValue } from 'jotai';
 
 type IProps = {
   height?: number;
@@ -32,6 +25,7 @@ type IProps = {
 };
 
 export function Header({ height, title, subtitle, onBack }: IProps) {
+  const navigationFgColor = useAtomValue(navigationTitleColorThemeAtom);
   const navigationBgColor = useAtomValue(navigationColorThemeAtom);
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     const style = { ...styles.container, backgroundColor: navigationBgColor };
@@ -42,7 +36,7 @@ export function Header({ height, title, subtitle, onBack }: IProps) {
   return (
     <View style={containerStyle}>
       <TouchableOpacity style={styles.backBtn} onPress={onBack}>
-        <Image source={require('../../assets/arrow-left.png')} />
+        <IcArrowLeft color={navigationFgColor} />
         <Avatar />
       </TouchableOpacity>
       <View style={styles.contentContainer}>

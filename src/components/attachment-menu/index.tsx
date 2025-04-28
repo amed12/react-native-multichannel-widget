@@ -1,15 +1,18 @@
-import React from 'react';
-import { useCallback } from 'react';
-import Picker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { Portal } from '@gorhom/portal';
+import { useAtomValue } from 'jotai/utils';
+import type { PropsWithChildren } from 'react';
+import { useCallback } from 'react';
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import type { DocumentPickerResponse } from 'react-native-document-picker';
+import Picker from 'react-native-document-picker';
+import IcAttachDocument from '../../icons/attach-document';
+import IcAttachImage from '../../icons/attach-image';
 import {
-  Image,
-  ImageProps,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+  fieldChatBorderColorThemeAtom,
+  fieldChatIconColorThemeAtom,
+  fieldChatTextColorThemeAtom,
+  sendContainerBackgroundColorThemeAtom,
+} from '../../state';
 
 type IAttachmentMenuProps = {
   onClose: () => void;
@@ -21,6 +24,10 @@ export function AttachmentMenu({
   onImageSelected,
   onDocumentSelected,
 }: IAttachmentMenuProps) {
+  const containerBgColor = useAtomValue(sendContainerBackgroundColorThemeAtom);
+  const containerFgBorderColor = useAtomValue(fieldChatBorderColorThemeAtom);
+  const iconColor = useAtomValue(fieldChatIconColorThemeAtom);
+
   const onPressImage = useCallback(() => {
     Picker.pickSingle({
       allowMultiSelection: false,
@@ -42,7 +49,15 @@ export function AttachmentMenu({
 
   return (
     <Portal name="attachment-menu-child" hostName="attachment-menu">
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: containerBgColor,
+            borderColor: containerFgBorderColor,
+          },
+        ]}
+      >
         <TouchableWithoutFeedback
           onPress={() => {
             onClose?.();
@@ -50,17 +65,21 @@ export function AttachmentMenu({
         >
           <View style={styles.backdrop} />
         </TouchableWithoutFeedback>
-        <View style={styles.popupContainer}>
-          <AttachmentItem
-            icon={require('../../assets/icon-attach-document.png')}
-            label="File / Document"
-            onPress={onPressDocument}
-          />
-          <AttachmentItem
-            icon={require('../../assets/icon-attach-image.png')}
-            label="Image"
-            onPress={onPressImage}
-          />
+        <View
+          style={[
+            styles.popupContainer,
+            {
+              backgroundColor: containerBgColor,
+              borderColor: containerFgBorderColor,
+            },
+          ]}
+        >
+          <AttachmentItem label="File / Document" onPress={onPressDocument}>
+            <IcAttachDocument color={iconColor} />
+          </AttachmentItem>
+          <AttachmentItem label="Image" onPress={onPressImage}>
+            <IcAttachImage color={iconColor} />
+          </AttachmentItem>
           {/* Spacer */}
           <View style={styles.spacer} />
         </View>
@@ -68,20 +87,21 @@ export function AttachmentMenu({
     </Portal>
   );
 }
-function AttachmentItem({
-  icon,
-  label,
-  onPress,
-}: {
-  icon: ImageProps['source'];
+
+type IAttachmentItemProps = PropsWithChildren<{
   label: string;
   onPress: () => void;
-}) {
+}>;
+function AttachmentItem({ label, onPress, children }: IAttachmentItemProps) {
+  const containerFgColor = useAtomValue(fieldChatTextColorThemeAtom);
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.menuItemContainer}>
-        <Image source={icon} />
-        <Text style={styles.menuItemLabel}>{label}</Text>
+        {children}
+        <Text style={[styles.menuItemLabel, { color: containerFgColor }]}>
+          {label}
+        </Text>
       </View>
     </TouchableWithoutFeedback>
   );

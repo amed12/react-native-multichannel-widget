@@ -1,8 +1,12 @@
-import format from 'date-fns/format';
-import React, { PropsWithChildren, useMemo } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { format } from 'date-fns/format';
+import { useAtomValue } from 'jotai/utils';
+import type { PropsWithChildren } from 'react';
+import { useMemo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { useBubbleBgColor } from '../../hooks/use-bubble-bg-color';
 import { useCurrentUser } from '../../hooks/use-current-user';
+import IcDoubleTick from '../../icons/double-tick';
+import IcTick from '../../icons/tick';
 import {
   roomSenderAvatarEnabledAtom,
   timeBackgroundColorThemeAtom,
@@ -10,7 +14,6 @@ import {
 } from '../../state';
 import type { Message } from '../../types';
 import { Avatar } from './avatar';
-import { useAtomValue } from 'jotai';
 
 type IProps = PropsWithChildren<{
   message: Message;
@@ -68,7 +71,7 @@ export function ChatBubble(props: IProps) {
           >
             {timeSent}
           </Text>
-          <Tick status={status as any} />
+          <Tick status={status as any} senderId={props.message.sender.id} />
         </View>
       )}
       {!withoutContainer && (
@@ -97,14 +100,17 @@ export function ChatBubble(props: IProps) {
   );
 }
 
-function Tick(props: { status: 'sent' | 'delivered' | 'read' }) {
+function Tick(props: {
+  status: 'sent' | 'delivered' | 'read';
+  senderId: string;
+}) {
+  const readColor = useBubbleBgColor(props.senderId);
+  const sentColor = useAtomValue(timeLabelTextColorThemeAtom);
+
   return props.status === 'read' ? (
-    <Image
-      source={require('../../assets/double-tick.png')}
-      style={styles.tickRead}
-    />
+    <IcDoubleTick style={styles.tickRead} color={readColor} />
   ) : (
-    <Image source={require('../../assets/tick.png')} style={styles.tickSent} />
+    <IcTick style={styles.tickSent} color={sentColor} />
   );
 }
 

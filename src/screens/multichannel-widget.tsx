@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PortalHost } from '@gorhom/portal';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai/utils';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';
 import { AttachmentMenu } from '../components/attachment-menu';
-import { Header } from '../components/header';
-import { useCurrentChatRoom } from '../hooks';
-import { useQiscus } from '../hooks';
+import { Header } from '../components/header/index';
+import { useCurrentChatRoom } from '../hooks/use-current-chatroom';
+import { useQiscus } from '../hooks/use-qiscus';
 import {
   baseColorThemeAtom,
   roomSubtitleTextAtom,
@@ -14,7 +15,6 @@ import {
 } from '../state';
 import { MessageForm } from './message-form';
 import { MessageList } from './message-list';
-import { useAtomValue } from 'jotai';
 
 type MultichannelWidgetProps = {
   onBack: () => void;
@@ -39,7 +39,9 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
     [qiscus, room, sendMessage]
   );
   const onLoadMore = useCallback(async () => {
-    await loadMoreMessages(lastMessageId);
+    if (lastMessageId != null) {
+      await loadMoreMessages(lastMessageId);
+    }
   }, [lastMessageId, loadMoreMessages]);
 
   const appTitle = useAtomValue(roomTitleAtom);

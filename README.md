@@ -6,8 +6,10 @@
 
 ## Dependency
 
-- @react-native-async-storage/async-storage: ^1.15.9
-- react-native-document-picker: ^7.1.0
+- @react-native-async-storage/async-storage: ^2.1.1
+- react-native-document-picker: ^9.3.1
+- react-native-svg: ^15.11.2
+
 
 ## Installation
 
@@ -135,8 +137,9 @@ Channel Id is an identity for each widget channel. If you have a specific widget
 | setNavigationTitleColor         | Set room title, room subtitle, and back button border color. |
 | setSendContainerColor           | Set icon send border-color.                                  |
 | setSendContainerBackgroundColor | Set send container background-color.                         |
-| setFieldChatBorderColor         | Set field chat border-color.                                 |
-| setFieldChatTextColor           | Set field chat text color.                                   |
+| setFieldChatBorderColor         | Set field chat border-color.                                  |
+| setFieldChatTextColor           | Set field chat text color.                                    |
+| setFieldChatIconColor           | Set field chat icon color.                                    |
 | setSystemEventTextColor         | Set system event text and border color.                      |
 | setLeftBubbleColor              | Set left bubble chat color (for: Admin, Supervisor, Agent).  |
 | setLeftBubbleTextColor          | Set left bubble text color (for: Admin, Supervisor, Agent).  |

@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { useAtomValue } from 'jotai/utils';
+import { useState } from 'react';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import IcAddAttachment from '../icons/add-attachment';
+import IcSendMessage from '../icons/send-message';
 import {
   fieldChatBorderColorThemeAtom,
+  fieldChatIconColorThemeAtom,
   fieldChatTextColorThemeAtom,
   sendContainerBackgroundColorThemeAtom,
   sendContainerColorThemeAtom,
 } from '../state';
-import { useAtomValue } from 'jotai';
 
 type MessageFormProps = {
   onTapAddAttachment: () => void;
@@ -26,6 +23,7 @@ export function MessageForm(props: MessageFormProps) {
   const containerFgBorderColor = useAtomValue(fieldChatBorderColorThemeAtom);
   const containerFgColor = useAtomValue(sendContainerColorThemeAtom);
   const fieldFgColor = useAtomValue(fieldChatTextColorThemeAtom);
+  const iconColor = useAtomValue(fieldChatIconColorThemeAtom);
 
   return (
     <View
@@ -38,7 +36,7 @@ export function MessageForm(props: MessageFormProps) {
       ]}
     >
       <TouchableOpacity onPress={props.onTapAddAttachment} style={styles.btn}>
-        <Image source={require('../assets/add-attachment.png')} />
+        <IcAddAttachment color={iconColor} />
       </TouchableOpacity>
       <View
         style={[
@@ -71,7 +69,7 @@ export function MessageForm(props: MessageFormProps) {
         }}
         style={styles.btn}
       >
-        <Image source={require('../assets/send-message.png')} />
+        <IcSendMessage color={iconColor} />
       </TouchableOpacity>
     </View>
   );

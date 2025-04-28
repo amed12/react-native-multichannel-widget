@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import invariant from 'invariant';
-import { useAtomCallback } from 'jotai/utils';
+import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useCallback, useEffect } from 'react';
 import {
   appIdAtom,
@@ -11,6 +11,7 @@ import {
   emptyBackgroundColorThemeAtom,
   emptyTextColorThemeAtom,
   fieldChatBorderColorThemeAtom,
+  fieldChatIconColorThemeAtom,
   fieldChatTextColorThemeAtom,
   lastUserTokenAtom,
   leftBubbleColorThemeAtom,
@@ -53,53 +54,57 @@ import { useInitiateChat } from './use-initiate-chat';
 import { useSetUser } from './use-set-user';
 import { useSetup } from './use-setup';
 import { useUpdateRoomInfo } from './use-update-room-info';
-import { useAtomValue, useSetAtom } from 'jotai';
 
 export function useMultichannelWidget(): IUseMultichannelWidget {
-  const setEnableNotification = useSetAtom(notificationEnabledAtom);
-  const setDeviceId = useSetAtom(deviceIdAtom);
-  const setChannelId = useSetAtom(channelIdAtom);
-  const setRoomTitle = useSetAtom(roomTitleAtom);
-  const setRoomSubtitleConfig = useSetAtom(roomSubtitleConfigAtom);
-  const setRoomSubtitleText = useSetAtom(roomSubtitleTextAtom);
+  const setEnableNotification = useUpdateAtom(notificationEnabledAtom);
+  const setDeviceId = useUpdateAtom(deviceIdAtom);
+  const setChannelId = useUpdateAtom(channelIdAtom);
+  const setRoomTitle = useUpdateAtom(roomTitleAtom);
+  const setRoomSubtitleConfig = useUpdateAtom(roomSubtitleConfigAtom);
+  const setRoomSubtitleText = useUpdateAtom(roomSubtitleTextAtom);
 
-  const set_navigationColorThemeAtom = useSetAtom(navigationColorThemeAtom);
-  const set_appBarColorThemeAtom = useSetAtom(navigationTitleColorThemeAtom);
-  const set_sendContainerColorThemeAtom = useSetAtom(
+  const set_navigationColorThemeAtom = useUpdateAtom(navigationColorThemeAtom);
+  const set_appBarColorThemeAtom = useUpdateAtom(navigationTitleColorThemeAtom);
+  const set_sendContainerColorThemeAtom = useUpdateAtom(
     sendContainerColorThemeAtom
   );
-  const set_fieldChatBorderColorThemeAtom = useSetAtom(
+  const set_fieldChatBorderColorThemeAtom = useUpdateAtom(
     fieldChatBorderColorThemeAtom
   );
-  const set_fieldChatTextColorThemeAtom = useSetAtom(
+  const set_fieldChatTextColorThemeAtom = useUpdateAtom(
     fieldChatTextColorThemeAtom
   );
-  const set_sendContainerBackgroundColorThemeAtom = useSetAtom(
+  const set_fieldChatIconColorThemeAtom = useUpdateAtom(
+    fieldChatIconColorThemeAtom
+  );
+  const set_sendContainerBackgroundColorThemeAtom = useUpdateAtom(
     sendContainerBackgroundColorThemeAtom
   );
-  const set_navigationTitleColorThemeAtom = useSetAtom(
+  const set_navigationTitleColorThemeAtom = useUpdateAtom(
     navigationTitleColorThemeAtom
   );
-  const set_systemEventTextColorThemeAtom = useSetAtom(
+  const set_systemEventTextColorThemeAtom = useUpdateAtom(
     systemEventTextColorThemeAtom
   );
-  const set_leftBubbleColorThemeAtom = useSetAtom(leftBubbleColorThemeAtom);
-  const set_rightBubbleColorThemeAtom = useSetAtom(rightBubbleColorThemeAtom);
-  const set_leftBubbleTextColorThemeAtom = useSetAtom(
+  const set_leftBubbleColorThemeAtom = useUpdateAtom(leftBubbleColorThemeAtom);
+  const set_rightBubbleColorThemeAtom = useUpdateAtom(
+    rightBubbleColorThemeAtom
+  );
+  const set_leftBubbleTextColorThemeAtom = useUpdateAtom(
     leftBubbleTextColorThemeAtom
   );
-  const set_rightBubbleTextColorThemeAtom = useSetAtom(
+  const set_rightBubbleTextColorThemeAtom = useUpdateAtom(
     rightBubbleTextColorThemeAtom
   );
-  const set_timeLabelTextColorThemeAtom = useSetAtom(
+  const set_timeLabelTextColorThemeAtom = useUpdateAtom(
     timeLabelTextColorThemeAtom
   );
-  const set_timeBackgroundColorThemeAtom = useSetAtom(
+  const set_timeBackgroundColorThemeAtom = useUpdateAtom(
     timeBackgroundColorThemeAtom
   );
-  const set_baseColorThemeAtom = useSetAtom(baseColorThemeAtom);
-  const set_emptyTextColorThemeAtom = useSetAtom(emptyTextColorThemeAtom);
-  const set_emptyBackgroundColorThemeAtom = useSetAtom(
+  const set_baseColorThemeAtom = useUpdateAtom(baseColorThemeAtom);
+  const set_emptyTextColorThemeAtom = useUpdateAtom(emptyTextColorThemeAtom);
+  const set_emptyBackgroundColorThemeAtom = useUpdateAtom(
     emptyBackgroundColorThemeAtom
   );
 
@@ -215,6 +220,7 @@ export function useMultichannelWidget(): IUseMultichannelWidget {
       setSendContainerColor: set_sendContainerColorThemeAtom,
       setFieldChatBorderColor: set_fieldChatBorderColorThemeAtom,
       setFieldChatTextColor: set_fieldChatTextColorThemeAtom,
+      setFieldChatIconColor: set_fieldChatIconColorThemeAtom,
       setSendContainerBackgroundColor:
         set_sendContainerBackgroundColorThemeAtom,
       setNavigationTitleColor: set_navigationTitleColorThemeAtom,
