@@ -48,7 +48,7 @@ export function Header({ height, title, subtitle, onBack }: IProps) {
 
 function Avatar() {
   const isLoggedIn = useComputedAtomValue(
-    (get) => get(currentUserAtom) != null
+    useMemo(() => (get) => get(currentUserAtom) != null, [])
   );
 
   return (
