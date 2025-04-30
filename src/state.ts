@@ -16,7 +16,7 @@ export const currentUserAtom = atomWithReset<Account | undefined>(undefined);
 export const roomAtom = atomWithImmer<Room | undefined>(undefined);
 export const messagesAtom = atomWithImmer<Record<string, Message>>({});
 export const messagesListAtom = atom((get) => {
-  let messages = Object.values(get(messagesAtom));
+  let messages = Object.values(get(messagesAtom) as Record<string, Message>);
   // messages.sort((m1, m2) => m1.unix_nano_timestamp - m2.unix_nano_timestamp);
   messages.sort((m1, m2) => m1.timestamp.getTime() - m2.timestamp.getTime());
 
