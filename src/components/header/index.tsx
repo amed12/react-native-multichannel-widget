@@ -1,4 +1,4 @@
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';

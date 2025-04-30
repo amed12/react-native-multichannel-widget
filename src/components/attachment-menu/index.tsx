@@ -1,5 +1,5 @@
 import { Portal } from '@gorhom/portal';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
 import { useCallback } from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';

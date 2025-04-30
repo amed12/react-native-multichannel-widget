@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PortalHost } from '@gorhom/portal';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';

@@ -1,6 +1,6 @@
 import { format } from 'date-fns/format';
 import { parse } from 'date-fns/parse';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 import _, { orderBy } from 'lodash';
 import { useCallback, useMemo } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
