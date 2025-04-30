@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import invariant from 'invariant';
-import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
+import { useAtomCallback } from 'jotai/utils';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import {
   appIdAtom,
@@ -56,55 +57,53 @@ import { useSetup } from './use-setup';
 import { useUpdateRoomInfo } from './use-update-room-info';
 
 export function useMultichannelWidget(): IUseMultichannelWidget {
-  const setEnableNotification = useUpdateAtom(notificationEnabledAtom);
-  const setDeviceId = useUpdateAtom(deviceIdAtom);
-  const setChannelId = useUpdateAtom(channelIdAtom);
-  const setRoomTitle = useUpdateAtom(roomTitleAtom);
-  const setRoomSubtitleConfig = useUpdateAtom(roomSubtitleConfigAtom);
-  const setRoomSubtitleText = useUpdateAtom(roomSubtitleTextAtom);
+  const setEnableNotification = useSetAtom(notificationEnabledAtom);
+  const setDeviceId = useSetAtom(deviceIdAtom);
+  const setChannelId = useSetAtom(channelIdAtom);
+  const setRoomTitle = useSetAtom(roomTitleAtom);
+  const setRoomSubtitleConfig = useSetAtom(roomSubtitleConfigAtom);
+  const setRoomSubtitleText = useSetAtom(roomSubtitleTextAtom);
 
-  const set_navigationColorThemeAtom = useUpdateAtom(navigationColorThemeAtom);
-  const set_appBarColorThemeAtom = useUpdateAtom(navigationTitleColorThemeAtom);
-  const set_sendContainerColorThemeAtom = useUpdateAtom(
+  const set_navigationColorThemeAtom = useSetAtom(navigationColorThemeAtom);
+  const set_appBarColorThemeAtom = useSetAtom(navigationTitleColorThemeAtom);
+  const set_sendContainerColorThemeAtom = useSetAtom(
     sendContainerColorThemeAtom
   );
-  const set_fieldChatBorderColorThemeAtom = useUpdateAtom(
+  const set_fieldChatBorderColorThemeAtom = useSetAtom(
     fieldChatBorderColorThemeAtom
   );
-  const set_fieldChatTextColorThemeAtom = useUpdateAtom(
+  const set_fieldChatTextColorThemeAtom = useSetAtom(
     fieldChatTextColorThemeAtom
   );
-  const set_fieldChatIconColorThemeAtom = useUpdateAtom(
+  const set_fieldChatIconColorThemeAtom = useSetAtom(
     fieldChatIconColorThemeAtom
   );
-  const set_sendContainerBackgroundColorThemeAtom = useUpdateAtom(
+  const set_sendContainerBackgroundColorThemeAtom = useSetAtom(
     sendContainerBackgroundColorThemeAtom
   );
-  const set_navigationTitleColorThemeAtom = useUpdateAtom(
+  const set_navigationTitleColorThemeAtom = useSetAtom(
     navigationTitleColorThemeAtom
   );
-  const set_systemEventTextColorThemeAtom = useUpdateAtom(
+  const set_systemEventTextColorThemeAtom = useSetAtom(
     systemEventTextColorThemeAtom
   );
-  const set_leftBubbleColorThemeAtom = useUpdateAtom(leftBubbleColorThemeAtom);
-  const set_rightBubbleColorThemeAtom = useUpdateAtom(
-    rightBubbleColorThemeAtom
-  );
-  const set_leftBubbleTextColorThemeAtom = useUpdateAtom(
+  const set_leftBubbleColorThemeAtom = useSetAtom(leftBubbleColorThemeAtom);
+  const set_rightBubbleColorThemeAtom = useSetAtom(rightBubbleColorThemeAtom);
+  const set_leftBubbleTextColorThemeAtom = useSetAtom(
     leftBubbleTextColorThemeAtom
   );
-  const set_rightBubbleTextColorThemeAtom = useUpdateAtom(
+  const set_rightBubbleTextColorThemeAtom = useSetAtom(
     rightBubbleTextColorThemeAtom
   );
-  const set_timeLabelTextColorThemeAtom = useUpdateAtom(
+  const set_timeLabelTextColorThemeAtom = useSetAtom(
     timeLabelTextColorThemeAtom
   );
-  const set_timeBackgroundColorThemeAtom = useUpdateAtom(
+  const set_timeBackgroundColorThemeAtom = useSetAtom(
     timeBackgroundColorThemeAtom
   );
-  const set_baseColorThemeAtom = useUpdateAtom(baseColorThemeAtom);
-  const set_emptyTextColorThemeAtom = useUpdateAtom(emptyTextColorThemeAtom);
-  const set_emptyBackgroundColorThemeAtom = useUpdateAtom(
+  const set_baseColorThemeAtom = useSetAtom(baseColorThemeAtom);
+  const set_emptyTextColorThemeAtom = useSetAtom(emptyTextColorThemeAtom);
+  const set_emptyBackgroundColorThemeAtom = useSetAtom(
     emptyBackgroundColorThemeAtom
   );
 
