@@ -191,3 +191,101 @@ yarn
 5. **Start Chat**
 
 The Example is ready to use. You can start to chat with your agent from the Qiscus Multichannel Chat dashboard.
+
+---
+
+## Maintainers Guide
+
+> This section is aimed at **engineers who want to work on the SDK itself**, not normal consumers of the package.
+
+### 1. Repository layout
+
+| Path | Purpose |
+|------|---------|
+| `src/` | Source of the widget (TypeScript/TSX). |
+| `ios/`, `android/` | Native modules & wrappers. |
+| `example/` | Expo app for manual testing. |
+| `lib/` | Auto-generated build artefacts (ignored in git). |
+
+### 2. Prerequisites
+
+* Node.js ≥ 18 (tested up to v22)
+* Yarn ≥ 3 (repo uses **Yarn workspaces**) – install with `npm i -g yarn`
+* Xcode / Android Studio tool-chains for native builds
+
+### 3. First-time setup
+
+```bash
+# at repo root
+yarn install            # installs root + example dependencies
+```
+
+> If you only want to try the example without editing the SDK, you can jump to step 5.
+
+### 4. Local development workflow
+
+1. Work on source in `src/…`.
+2. Run the example app **linked to your local widget**:
+   ```bash
+   cd example
+   # Android
+   npm run android:dev
+   # iOS
+   npm run ios:dev
+   # Web / Metro only
+   npm run start:dev
+   ```
+   The `:dev` scripts set `USE_LOCAL_WIDGET=1` which:
+   * Adds the library root to Metro watchFolders
+   * Aliases `@qiscus-community/react-native-multichannel-widget` to the local path
+   * Enables hot-reload on changes
+
+3. Type-check & lint during development:
+   ```bash
+   yarn typecheck   # tsc in strict mode
+   yarn lint        # eslint + prettier rules
+   ```
+
+### 5. Building the package
+
+Generate production bundles (CommonJS, ESModule & typings):
+
+```bash
+yarn clean           # optional – deletes /lib
+yarn prepare         # runs "bob build" via package.json
+```
+
+Output will be in `lib/`.
+
+### 6. Running automated tests
+
+```bash
+yarn test            # uses Jest + React-Native preset
+```
+
+### 7. Releasing to npm
+
+1. Make sure `git status` is clean and `origin/main` is up-to-date.
+2. Bump the version & publish:
+   ```bash
+   yarn release      # powered by release-it & conventional-changelog
+   ```
+3. The command will:
+   * Prompt for the new semver version
+   * Run build, tests, lint
+   * Commit & tag (`chore: release vX.Y.Z`)
+   * Publish to npm (`@qiscus-community/react-native-multichannel-widget`)
+
+### 8. Commit conventions
+
+This repo follows **Conventional Commits**. Examples:
+
+* `feat: add dark-mode support`
+* `fix(widget): prevent crash on empty userId`
+* `chore: bump deps`
+
+Enforced via husky + commitlint.
+
+---
+
+Happy hacking! 🎉
