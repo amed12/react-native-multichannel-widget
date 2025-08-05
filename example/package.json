@@ -6,7 +6,10 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "start:dev": "cross-env USE_LOCAL_WIDGET=1 expo start",
+    "android:dev": "cross-env USE_LOCAL_WIDGET=1 expo run:android",
+    "ios:dev": "cross-env USE_LOCAL_WIDGET=1 expo run:ios"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
@@ -18,11 +21,12 @@
     "react-native": "0.76.7",
     "react-native-document-picker": "^9.3.1",
     "react-native-svg": "^15.11.2",
+    "@qiscus-community/react-native-multichannel-widget": "^2.1.1",
     "react-native-web": "~0.19.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "react-native-builder-bob": "^0.37.0",
+    "cross-env": "^7.0.3",
     "typescript": "^5.8.3"
   },
   "private": true

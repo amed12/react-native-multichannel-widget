@@ -1,9 +1,5 @@
 const path = require('path');
 const { getDefaultConfig } = require('@expo/metro-config');
-const { getConfig } = require('react-native-builder-bob/metro-config');
-const pkg = require('../package.json');
-
-const root = path.resolve(__dirname, '..');
 
 /**
  * Metro configuration
@@ -11,8 +7,21 @@ const root = path.resolve(__dirname, '..');
  *
  * @type {import('metro-config').MetroConfig}
  */
-module.exports = getConfig(getDefaultConfig(__dirname), {
-  root,
-  pkg,
-  project: __dirname,
-});
+const projectRoot = __dirname;
+const localSdkPath = path.resolve(projectRoot, '..');
+const useLocal = process.env.USE_LOCAL_WIDGET === '1';
+
+const config = getDefaultConfig(projectRoot);
+
+if (useLocal) {
+  // Allow Metro to resolve the local SDK package instead of the one in node_modules
+  config.watchFolders = [...(config.watchFolders || []), localSdkPath];
+  config.resolver ??= {};
+  config.resolver.extraNodeModules = {
+    ...(config.resolver.extraNodeModules || {}),
+    '@qiscus-community/react-native-multichannel-widget': localSdkPath,
+  };
+}
+
+module.exports = config;
+
