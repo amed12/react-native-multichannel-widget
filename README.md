@@ -6,10 +6,13 @@
 
 ## Dependency
 
-- @react-native-async-storage/async-storage: ^2.1.1
-- react-native-document-picker: ^9.3.1
-- react-native-svg: ^15.11.2
+This package relies on several peer dependencies that must already exist in your host app:
 
+- `@react-native-async-storage/async-storage`: ^2.1.1
+- `react-native-document-picker`: ^9.3.1
+- `react-native-svg`: ^15.11.2
+
+Because they are peer dependencies, they **must** be installed in the consumer app in addition to the widget.
 
 ## Installation
 
@@ -18,8 +21,21 @@
 yarn add @qiscus-community/react-native-multichannel-widget
 
 # Dependencies required for qiscus multichannel
-yarn add @react-native-async-storage/async-storage react-native-document-picker
+yarn add @react-native-async-storage/async-storage react-native-document-picker react-native-svg
 ```
+
+### Native setup
+
+All three peer dependencies contain native code. React Native autolinking will register them on iOS and Android, but you still have to complete the platform build steps:
+
+1. iOS
+   - Run `cd ios && pod install && cd ..` to install the pods produced by the packages above.
+   - Ensure your Podfile uses `use_frameworks! :linkage => :static` or the default CocoaPods linking mode so `RNSVG`, `RNDocumentPicker`, and `RNAsyncStorage` are compiled into the app.
+2. Android
+   - No manual linking is needed (RN >= 0.63), but you must re-run Gradle after dependencies change: `cd android && ./gradlew clean && cd ..` or rebuild from Android Studio.
+   - Confirm that your app already requests the runtime permissions required by `react-native-document-picker` (e.g. READ/WRITE external storage if you support Android versions that still need them). The library will prompt users, but the permissions must exist in `AndroidManifest.xml`.
+
+After these steps, rebuild the native app (Xcode/Android Studio or `yarn ios` / `yarn android`) so the widget can access the peer dependencies.
 
 ## How To Use
 
@@ -158,7 +174,7 @@ Channel Id is an identity for each widget channel. If you have a specific widget
 1. **Get your APPID**
 
 - Go to [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/) to register your email
-- Log in to Qiscus Multichannel Chat with yout email and password
+- Log in to Qiscus Multichannel Chat with your email and password
 - Go to ‘Setting’ menu on the left bar
 - Look for ‘App Information’
 - You can find APPID in the App Info
@@ -169,18 +185,18 @@ Channel Id is an identity for each widget channel. If you have a specific widget
 - Look for ‘Qiscus Widget’
 - Slide the toggle to activate the Qiscus widget
 
-3. **Run npm install**
+3. **Install the example dependencies**
 
-After cloning the example, you need to run this code to install all C*ocoapods* dependencies needed by the Example
+From the repository root run:
 
 ```
-yarn
+yarn install
 ```
 
-4. **Set YOUR_APP_ID in the Example**
+4. **Configure the example**
 
-- Open example/src/App.tsx
-- Replace the `APP_ID` at line 12 with your appId
+- Open `example/src/App.tsx`
+- Replace the `APP_ID` constant with your App ID and optionally update `CHANNEL_ID`
 
 ```javascript
 <MultichannelWidgetProvider appId={APP_ID}>
@@ -188,6 +204,12 @@ yarn
 </MultichannelWidgetProvider>
 ```
 
-5. **Start Chat**
+5. **Run the example app**
 
-The Example is ready to use. You can start to chat with your agent from the Qiscus Multichannel Chat dashboard.
+From the `example` directory start the Metro bundler with `yarn start`. In another terminal run one of the following:
+
+- `yarn android` to build and install the Expo project on an Android device/emulator.
+- `yarn ios` to build and install on the iOS simulator (requires Xcode and CocoaPods).
+- `yarn web` to try the widget in a browser.
+
+Once the app launches you can start chatting with the agents that monitor your Qiscus Multichannel Chat dashboard.
