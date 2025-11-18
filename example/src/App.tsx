@@ -21,8 +21,8 @@ import { useFirebase } from './use-firebase';
 // export const APP_ID = 'YOUR_APP_ID';
 // export const CHANNEL_ID = 'YOUR_CHANNEL_ID';
 
-export const APP_ID = 'ramo-29lun8b1ulepsaio';
-export const CHANNEL_ID = '127590';
+export const APP_ID = 'wefds-c6f0p2h1cxwz3oq';
+export const CHANNEL_ID = '126962';
 
 
 export default function Container() {
