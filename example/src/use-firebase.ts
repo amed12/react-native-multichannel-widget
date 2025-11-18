@@ -1,65 +1,81 @@
+import notifee from '@notifee/react-native';
 import { useMultichannelWidget } from '@qiscus-community/react-native-multichannel-widget';
-import firebase from '@react-native-firebase/app';
-import messaging from '@react-native-firebase/messaging';
-import { useRef } from 'react';
-import useAsyncEffect from 'use-async-effect';
-import PushNotification from 'react-native-push-notification';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import { useEffect } from 'react';
+import { displayRemoteNotification } from './notifications';
 
+/**
+ * Firebase Cloud Messaging hook for push notifications
+ * Following React Native Firebase documentation: https://rnfirebase.io/
+ */
 export function useFirebase() {
-  const app = useRef(firebase.app);
   const widget = useMultichannelWidget();
 
-  useAsyncEffect(async () => {
-    // firebase.initializeApp();
+  useEffect(() => {
+    let unsubscribeOnMessage: (() => void) | undefined;
+    let unsubscribeNotificationOpened: (() => void) | undefined;
+    let unsubscribeTokenRefresh: (() => void) | undefined;
 
-    widget.setDeviceId?.(await firebase.messaging().getToken());
+    const setupFirebase = async () => {
+      try {
+        await messaging().registerDeviceForRemoteMessages();
+        await notifee.requestPermission();
 
-    const permission = await messaging().requestPermission();
-    if (permission === messaging.AuthorizationStatus.AUTHORIZED) {
-      console.log('has permission', permission);
-    }
+        // Request permission for FCM
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    messaging().setBackgroundMessageHandler(async (message) => {
-      console.log('[Firebase] Received background message ', message);
-      console.log('@fcm.message', message);
-      let payload = JSON.parse(message.data?.payload ?? '{}');
-      console.log('payload:', payload);
-      PushNotification.localNotification({
-        message: payload.message,
-        allowWhileIdle: true,
-        channelId: 'general',
-        title: 'New message',
-      });
-    });
+        if (enabled) {
+          console.log('[Firebase] Authorization status:', authStatus);
+        }
 
-    PushNotification.channelExists('general', (exists: boolean) => {
-      if (!exists) {
-        PushNotification.createChannel(
-          {
-            channelId: 'general',
-            channelName: 'General',
-          },
-          (created: boolean) => {
-            console.log('channel created', created);
+        // Get FCM token and set as device ID
+        const token = await messaging().getToken();
+        if (token) {
+          console.log('[Firebase] FCM Token:', token);
+          widget.setDeviceId?.(token);
+        }
+
+        // Handle foreground messages
+        unsubscribeOnMessage = messaging().onMessage(async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
+          console.log('[Firebase] Foreground message received:', remoteMessage);
+          await displayRemoteNotification(remoteMessage);
+        });
+
+        // Handle notification opened app from background/quit state
+        unsubscribeNotificationOpened = messaging().onNotificationOpenedApp(
+          (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
+            console.log('[Firebase] Notification opened app from background:', remoteMessage);
           }
         );
+
+        // Check if app was opened from a notification (quit state)
+        messaging()
+          .getInitialNotification()
+          .then((remoteMessage: FirebaseMessagingTypes.RemoteMessage | null) => {
+            if (remoteMessage) {
+              console.log('[Firebase] App opened from quit state by notification:', remoteMessage);
+            }
+          });
+
+        // Handle token refresh
+        unsubscribeTokenRefresh = messaging().onTokenRefresh((newToken: string) => {
+          console.log('[Firebase] Token refreshed:', newToken);
+          widget.setDeviceId?.(newToken);
+        });
+      } catch (error) {
+        console.error('[Firebase] Setup error:', error);
       }
-    });
+    };
 
-    const subs = messaging().onMessage(async (message) => {
-      console.log('@fcm.message', message);
-      let payload = JSON.parse(message.data?.payload ?? '{}');
-      console.log('payload:', payload);
-      PushNotification.localNotification({
-        message: payload.message,
-        allowWhileIdle: true,
-        channelId: 'general',
-        title: 'New message',
-      });
-    });
+    setupFirebase();
 
-    return () => subs?.();
-  }, [widget.setDeviceId]);
-
-  return app.current;
+    return () => {
+      unsubscribeOnMessage?.();
+      unsubscribeNotificationOpened?.();
+      unsubscribeTokenRefresh?.();
+    };
+  }, [widget]);
 }
