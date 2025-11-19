@@ -63,7 +63,7 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
 
       qiscus.upload(file as any, (error, progress, url) => {
         if (error != null) {
-          console.error('[Upload] Error:', error);
+          console.log('[Upload] Error:', error);
         }
         if (progress != null) {
           console.log('[Upload] Progress:', progress);
@@ -95,7 +95,7 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
 
       qiscus.upload(file as any, (error, progress, url) => {
         if (error != null) {
-          console.error('[Upload] Error:', error);
+          console.log('[Upload] Error:', error);
         }
         if (progress != null) {
           console.log('[Upload] Progress:', progress);
