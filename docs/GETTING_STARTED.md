@@ -24,13 +24,27 @@ yarn install             # installs root + example dependencies
 
 > Tip: If you edit the library code inside `src`, run `yarn prepare` to rebuild the distributable files consumed by the example app.
 
-## 3. Retrieve Your Qiscus Credentials
+> ⚠️ The repo is pinned to **Yarn 3 (Berry)** through `packageManager`. Stick to `yarn` commands—running `npm install` or `npx` in the root will rewrite lockfiles and frequently break the example workspace.
+
+## 3. Yarn Workflow Cheat Sheet
+
+| Command | Run inside | Why it matters |
+| --- | --- | --- |
+| `yarn install` | Repo root | Installs every workspace (library + example) with the pinned Yarn version. Re-run after pulling new changes or installing extra dev tools. |
+| `yarn prepare` | Repo root | Builds the library via `react-native-builder-bob` so the example consumes your latest edits. Required any time you change files in `src/`, `android/`, or `ios/`. |
+| `yarn test` / `yarn lint` / `yarn typecheck` | Repo root | Quickly validate your changes before publishing or pushing. |
+| `cd example && yarn install` | `example/` (only if prompted) | The workspace shares dependencies from the root install, but if Expo asks for missing packages, install them here with `yarn`, never `npm`. |
+| `cd example && yarn start` / `yarn android` / `yarn ios` | `example/` | Boots the Expo bundler or runs native builds. These commands expect the root install + any recent `yarn prepare` run. |
+
+Having a mental map of where to run each `yarn` command saves time and avoids accidentally mixing package managers.
+
+## 4. Retrieve Your Qiscus Credentials
 
 1. Sign in to [Qiscus Multichannel Chat](https://multichannel.qiscus.com/).
 2. Open **Settings → App Information** and copy the `APP_ID`.
 3. (Optional) Navigate to **Integration → Qiscus Widget** to activate the widget and grab a specific `CHANNEL_ID` if you plan to target a non-default widget channel.
 
-## 4. Configure the Example App
+## 5. Configure the Example App
 
 1. Open `example/src/App.tsx`.
 2. Replace the `APP_ID` constant (and `CHANNEL_ID` if desired) with the values taken from the dashboard.
@@ -38,7 +52,7 @@ yarn install             # installs root + example dependencies
 
 The example already sets up `MultichannelWidgetProvider`, login, and chat components; you only need to inject valid credentials.
 
-## 5. Run the Example with Expo
+## 6. Run the Example with Expo
 
 ```bash
 cd example
@@ -53,13 +67,13 @@ In a separate terminal choose one of:
 
 Expo will prompt you to select the target if multiple devices are detected. When the app launches, enter any `userId`/`displayName` pair and tap the login button to start the conversation with your agents on the Qiscus dashboard.
 
-## 6. Common Tasks
+## 7. Common Tasks
 
 - **Clear Metro cache** – Run `yarn start --reset-cache` inside `example` if the bundler serves stale code.
 - **Update native dependencies** – After changing native code (inside `android`/`ios` folders of the library), re-run `yarn install` followed by `yarn example ios|android` to regenerate native builds.
 - **Testing the library** – From the repo root run `yarn test` (Jest), `yarn lint`, or `yarn typecheck` before publishing.
 
-## 7. Troubleshooting
+## 8. Troubleshooting
 
 - `Command yarn android fails with SDK errors` – Make sure Android Studio has downloaded the latest Platform Tools and that `ANDROID_HOME` is set.
 - `CocoaPods cannot find dependencies` – Run `sudo gem install cocoapods` once, then `npx pod-install` under `example/ios`.
