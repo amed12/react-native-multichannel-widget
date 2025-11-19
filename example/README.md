@@ -18,7 +18,6 @@ example/
 ├── babel.config.js        # Babel config
 ├── tsconfig.json          # TypeScript config
 ├── jest.config.js         # Jest setup
-└── MIGRATION_EXPO_TO_RN.md# Migration instructions
 ```
 
 ## Requirements
@@ -85,4 +84,3 @@ yarn lint
 - ✅ TypeScript support
 - ✅ Qiscus Multichannel Widget integration
 - ✅ Firebase Cloud Messaging + Notifee notifications (optional)
-- ✅ Monorepo workspace setup
