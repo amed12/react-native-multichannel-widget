@@ -57,5 +57,5 @@ fastlane/test_output
 # Firebase
 firebase.json
 android/app/google-services.json
-ios/MyProject/GoogleService-Info.plist
+ios/GoogleService-Info.plist
 

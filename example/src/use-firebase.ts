@@ -1,7 +1,8 @@
 import notifee from '@notifee/react-native';
 import { useMultichannelWidget } from '@qiscus-community/react-native-multichannel-widget';
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { Platform } from 'react-native';
 import { displayRemoteNotification } from './notifications';
 
 /**
@@ -10,15 +11,21 @@ import { displayRemoteNotification } from './notifications';
  */
 export function useFirebase() {
   const widget = useMultichannelWidget();
+  const hasInitializedRef = useRef(false);
 
   useEffect(() => {
+    if (hasInitializedRef.current) {
+      return;
+    }
+
+    hasInitializedRef.current = true;
+
     let unsubscribeOnMessage: (() => void) | undefined;
     let unsubscribeNotificationOpened: (() => void) | undefined;
     let unsubscribeTokenRefresh: (() => void) | undefined;
 
     const setupFirebase = async () => {
       try {
-        await messaging().registerDeviceForRemoteMessages();
         await notifee.requestPermission();
 
         // Request permission for FCM
@@ -27,8 +34,17 @@ export function useFirebase() {
           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
           authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-        if (enabled) {
-          console.log('[Firebase] Authorization status:', authStatus);
+        if (!enabled) {
+          console.warn('[Firebase] Notification permission not granted');
+          throw new Error('Notification permission denied');
+        }
+
+        console.log('[Firebase] Authorization status:', authStatus);
+
+        // Register device for remote messages on iOS
+        if (Platform.OS === 'ios' && !messaging().isDeviceRegisteredForRemoteMessages) {
+          await messaging().registerDeviceForRemoteMessages();
+          console.log('[Firebase] Device registered for remote messages');
         }
 
         // Get FCM token and set as device ID
@@ -36,6 +52,8 @@ export function useFirebase() {
         if (token) {
           console.log('[Firebase] FCM Token:', token);
           widget.setDeviceId?.(token);
+        } else {
+          console.warn('[Firebase] No FCM token received');
         }
 
         // Handle foreground messages
@@ -52,13 +70,10 @@ export function useFirebase() {
         );
 
         // Check if app was opened from a notification (quit state)
-        messaging()
-          .getInitialNotification()
-          .then((remoteMessage: FirebaseMessagingTypes.RemoteMessage | null) => {
-            if (remoteMessage) {
-              console.log('[Firebase] App opened from quit state by notification:', remoteMessage);
-            }
-          });
+        const initialNotification = await messaging().getInitialNotification();
+        if (initialNotification) {
+          console.log('[Firebase] App opened from quit state by notification:', initialNotification);
+        }
 
         // Handle token refresh
         unsubscribeTokenRefresh = messaging().onTokenRefresh((newToken: string) => {
@@ -66,7 +81,18 @@ export function useFirebase() {
           widget.setDeviceId?.(newToken);
         });
       } catch (error) {
-        console.error('[Firebase] Setup error:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('[Firebase] Setup error:', errorMessage);
+        
+        // Don't retry on permission denial or iOS simulator limitations
+        if (errorMessage.includes('permission') || 
+            errorMessage.includes('unregistered') ||
+            errorMessage.includes('simulator')) {
+          console.warn('[Firebase] Skipping Firebase setup due to:', errorMessage);
+          return;
+        }
+        
+        throw error; // Re-throw unexpected errors
       }
     };
 
