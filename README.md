@@ -21,6 +21,8 @@ yarn add @qiscus-community/react-native-multichannel-widget
 yarn add @react-native-async-storage/async-storage react-native-document-picker
 ```
 
+For contributor and maintainer workflow (workspace setup, example app, lint/test/release), see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## How To Use
 
 ### Initialization
@@ -153,41 +155,72 @@ Channel Id is an identity for each widget channel. If you have a specific widget
 
 ![Color Customization Image](/Readme/colorConfig.png)
 
-## How to Run the Example
+## Development: Run the Example App
 
-1. **Get your APPID**
+Use these steps when developing this library locally.
 
-- Go to [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/) to register your email
-- Log in to Qiscus Multichannel Chat with yout email and password
-- Go to ‘Setting’ menu on the left bar
-- Look for ‘App Information’
-- You can find APPID in the App Info
+1. **Install dependencies (workspace root)**
 
-2. **Activate Qiscus Widget Integration**
-
-- Go to ‘Integration’ menu on the left bar
-- Look for ‘Qiscus Widget’
-- Slide the toggle to activate the Qiscus widget
-
-3. **Run npm install**
-
-After cloning the example, you need to run this code to install all C*ocoapods* dependencies needed by the Example
-
-```
-yarn
+```sh
+corepack yarn install
 ```
 
-4. **Set YOUR_APP_ID in the Example**
+2. **Get your APP_ID**
 
-- Open example/src/App.tsx
-- Replace the `APP_ID` at line 12 with your appId
+- Go to [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/) and sign in
+- Open `Setting` -> `App Information`
+- Copy your `APP_ID`
 
-```javascript
-<MultichannelWidgetProvider appId={APP_ID}>
-  <App />
-</MultichannelWidgetProvider>
+3. **Activate Qiscus Widget Integration**
+
+- Open `Integration` in Qiscus dashboard
+- Enable `Qiscus Widget`
+
+4. **Set `APP_ID` in example app**
+
+- Open `example/src/App.tsx`
+- Replace `APP_ID` with your app ID
+
+5. **Start Metro (terminal 1, repo root)**
+
+```sh
+corepack yarn example:metro
 ```
 
-5. **Start Chat**
+6. **Run app target (terminal 2, repo root)**
 
-The Example is ready to use. You can start to chat with your agent from the Qiscus Multichannel Chat dashboard.
+```sh
+# Android
+corepack yarn example:android
+
+# iOS
+corepack yarn example:ios
+
+# Web
+corepack yarn example:web
+```
+
+Optional Android device selection:
+
+```sh
+corepack yarn example:android -- --device
+```
+
+### Troubleshooting
+
+- `sh: expo: command not found`: install dependencies first with `corepack yarn install`, then run scripts from repository root.
+- `No version is set for command yarn`: use `corepack yarn ...` instead of plain `yarn`.
+- Native code change is not reflected: rerun `corepack yarn example:android` or `corepack yarn example:ios` to rebuild native app.
+
+## Library Maintenance (Maintainers)
+
+Run all commands from repository root:
+
+```sh
+corepack yarn typecheck
+corepack yarn lint
+corepack yarn test
+corepack yarn prepare
+```
+
+For contribution, release, and commit rules, see [CONTRIBUTING.md](./CONTRIBUTING.md).
