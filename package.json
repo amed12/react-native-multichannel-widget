@@ -37,7 +37,13 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace @qiscus-community/react-native-multichannel-widget-example",
+    "example:metro": "yarn workspace @qiscus-community/react-native-multichannel-widget-example start",
+    "example:doctor": "yarn workspace @qiscus-community/react-native-multichannel-widget-example doctor",
+    "example:fix-doctor": "yarn workspace @qiscus-community/react-native-multichannel-widget-example fix-doctor",
+    "example:android": "yarn workspace @qiscus-community/react-native-multichannel-widget-example android",
+    "example:ios": "yarn workspace @qiscus-community/react-native-multichannel-widget-example ios",
+    "example:web": "yarn workspace @qiscus-community/react-native-multichannel-widget-example web",
+    "start-example-server": "yarn example:metro",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
