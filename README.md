@@ -58,7 +58,7 @@ Attachment behavior:
 
 Version guidance:
 - Minimum recommended version: `@react-native-documents/picker@10.1.7`
-- Supported peer range in this library: `^10.1.7 || ^11.0.0 || ^12.0.0`
+- Supported peer range in this library: `>=10.1.7`
 - For React Native `<0.79`, keep using `@react-native-documents/picker` `10.x`.
 - `react-native-document-picker` package name is deprecated and has been renamed.
 - `@react-native-documents/picker` is native-only, so Expo requires development build (`expo run:android` / `expo run:ios`), not Expo Go.
