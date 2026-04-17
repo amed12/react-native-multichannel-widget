@@ -32,5 +32,7 @@ export function Chat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Attachment picker is handled internally by the library via
+  // @react-native-documents/picker (minimum supported: >=10.1.7).
   return <MultichannelWidget onBack={() => widget.clearUser()} />;
 }
