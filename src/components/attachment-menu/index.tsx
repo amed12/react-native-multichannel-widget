@@ -3,8 +3,7 @@ import { useAtomValue } from 'jotai/utils';
 import type { PropsWithChildren } from 'react';
 import { useCallback } from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import type { DocumentPickerResponse } from 'react-native-document-picker';
-import Picker from 'react-native-document-picker';
+import type { FilePicker, PickedFile } from '../../types/file-picker';
 import IcAttachDocument from '../../icons/attach-document';
 import IcAttachImage from '../../icons/attach-image';
 import {
@@ -16,38 +15,50 @@ import {
 
 type IAttachmentMenuProps = {
   onClose: () => void;
-  onImageSelected: (v: DocumentPickerResponse) => void;
-  onDocumentSelected: (v: DocumentPickerResponse) => void;
+  /** Called after the user picks an image; result is a generic PickedFile. */
+  onImageSelected: (v: PickedFile) => void;
+  /** Called after the user picks a document; result is a generic PickedFile. */
+  onDocumentSelected: (v: PickedFile) => void;
+  /**
+   * Async function that opens an image picker and resolves with a PickedFile.
+   * Provide your own implementation (e.g. react-native-document-picker,
+   * expo-document-picker, react-native-image-picker, …).
+   */
+  pickImage: FilePicker;
+  /**
+   * Async function that opens a document/file picker and resolves with a PickedFile.
+   */
+  pickDocument: FilePicker;
 };
 export function AttachmentMenu({
   onClose,
   onImageSelected,
   onDocumentSelected,
+  pickImage,
+  pickDocument,
 }: IAttachmentMenuProps) {
   const containerBgColor = useAtomValue(sendContainerBackgroundColorThemeAtom);
   const containerFgBorderColor = useAtomValue(fieldChatBorderColorThemeAtom);
   const iconColor = useAtomValue(fieldChatIconColorThemeAtom);
 
   const onPressImage = useCallback(() => {
-    Picker.pickSingle({
-      allowMultiSelection: false,
-      type: Picker.types.images,
-      copyTo: 'cachesDirectory',
-    })
-      .then((v) => onImageSelected(v))
-      .then(() => onClose())
+    pickImage()
+      .then((v) => {
+        if (!v) return;
+        onImageSelected(v);
+        onClose();
+      })
       .catch(() => {});
-  }, [onClose, onImageSelected]);
+  }, [onClose, onImageSelected, pickImage]);
   const onPressDocument = useCallback(() => {
-    Picker.pickSingle({
-      allowMultiSelection: false,
-      type: Picker.types.allFiles,
-      copyTo: 'cachesDirectory',
-    })
-      .then((v) => onDocumentSelected(v))
-      .then(() => onClose())
+    pickDocument()
+      .then((v) => {
+        if (!v) return;
+        onDocumentSelected(v);
+        onClose();
+      })
       .catch(() => {});
-  }, [onClose, onDocumentSelected]);
+  }, [onClose, onDocumentSelected, pickDocument]);
 
   return (
     <Portal name="attachment-menu-child" hostName="attachment-menu">

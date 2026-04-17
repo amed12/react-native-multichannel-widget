@@ -43,7 +43,6 @@
     "example:android": "yarn workspace @qiscus-community/react-native-multichannel-widget-example android",
     "example:ios": "yarn workspace @qiscus-community/react-native-multichannel-widget-example ios",
     "example:web": "yarn workspace @qiscus-community/react-native-multichannel-widget-example web",
-    "start-example-server": "yarn example:metro",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
@@ -88,19 +87,20 @@
     "react": "18.3.1",
     "react-native": "0.76.7",
     "react-native-builder-bob": "^0.37.0",
-    "react-native-document-picker": "^9.3.1",
     "react-native-svg": "^15.11.2",
     "release-it": "^17.10.0",
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "@types/react": "^18.2.44"
+    "@types/react": "^18.2.44",
+    "metro": "^0.81.0",
+    "metro-resolver": "^0.81.0",
+    "metro-config": "^0.81.0"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-document-picker": "*",
     "react-native-svg": "*"
   },
   "workspaces": [
