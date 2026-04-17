@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import { PortalHost } from '@gorhom/portal';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import type { PickedFile } from '../types/file-picker';
 import { AttachmentMenu } from '../components/attachment-menu';
 import { Header } from '../components/header/index';
@@ -10,6 +10,8 @@ import { useCurrentChatRoom } from '../hooks/use-current-chatroom';
 import { useQiscus } from '../hooks/use-qiscus';
 import {
   baseColorThemeAtom,
+  currentUserAtom,
+  messagesAtom,
   roomSubtitleTextAtom,
   roomTitleAtom,
 } from '../state';
@@ -22,6 +24,8 @@ type MultichannelWidgetProps = {
 
 export function MultichannelWidget(props: MultichannelWidgetProps) {
   const qiscus = useQiscus();
+  const currentUser = useAtomValue(currentUserAtom);
+  const setMessages = useUpdateAtom(messagesAtom);
   const { room, messages, sendMessage, loadMoreMessages } =
     useCurrentChatRoom();
 
@@ -33,7 +37,9 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
           roomId: room.id,
           text,
         });
-        await sendMessage(message);
+        await sendMessage(message).catch(() => {
+          Alert.alert('Gagal', 'Pesan gagal dikirim');
+        });
       }
     },
     [qiscus, room, sendMessage]
@@ -171,10 +177,27 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
         name: v.name || 'image.jpg',
       };
 
+      const placeholderId = `upload-${Date.now()}`;
+      setMessages((prev: Record<string, any>) => {
+        prev[placeholderId] = {
+          id: Date.now(),
+          uniqueId: placeholderId,
+          type: 'loading_placeholder',
+          text: `Uploading ${file.name}...`,
+          status: 'sending',
+          timestamp: new Date(),
+          chatRoomId: room?.id,
+          sender: currentUser,
+        } as any;
+      });
+
       try {
         const url = await uploadAttachment(file);
 
         if (!room) {
+          setMessages((prev: Record<string, any>) => {
+            delete prev[placeholderId];
+          });
           return;
         }
 
@@ -185,10 +208,23 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
           text: '',
         });
 
-        sendMessage(message);
-      } catch {}
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        sendMessage(message).catch(() => {
+          Alert.alert('Gagal', 'Pesan gagal dikirim');
+        });
+      } catch {
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        Alert.alert(
+          'Gagal',
+          'Terjadi kesalahan saat mengunggah lampiran gambar.'
+        );
+      }
     },
-    [qiscus, room, sendMessage, uploadAttachment]
+    [qiscus, room, sendMessage, uploadAttachment, setMessages, currentUser]
   );
   const onDocumentSelected = useCallback(
     async (v: PickedFile) => {
@@ -199,10 +235,27 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
         name: v.name || 'document',
       };
 
+      const placeholderId = `upload-${Date.now()}`;
+      setMessages((prev: Record<string, any>) => {
+        prev[placeholderId] = {
+          id: Date.now(),
+          uniqueId: placeholderId,
+          type: 'loading_placeholder',
+          text: `Uploading ${file.name}...`,
+          status: 'sending',
+          timestamp: new Date(),
+          chatRoomId: room?.id,
+          sender: currentUser,
+        } as any;
+      });
+
       try {
         const url = await uploadAttachment(file);
 
         if (!room) {
+          setMessages((prev: Record<string, any>) => {
+            delete prev[placeholderId];
+          });
           return;
         }
 
@@ -213,10 +266,23 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
           text: '',
         });
 
-        sendMessage(message);
-      } catch {}
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        sendMessage(message).catch(() => {
+          Alert.alert('Gagal', 'Pesan gagal dikirim');
+        });
+      } catch {
+        setMessages((prev: Record<string, any>) => {
+          delete prev[placeholderId];
+        });
+        Alert.alert(
+          'Gagal',
+          'Terjadi kesalahan saat mengunggah lampiran dokumen.'
+        );
+      }
     },
-    [qiscus, room, sendMessage, uploadAttachment]
+    [qiscus, room, sendMessage, uploadAttachment, setMessages, currentUser]
   );
 
   return (
