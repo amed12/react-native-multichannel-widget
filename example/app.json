@@ -1,12 +1,22 @@
 {
   "expo": {
-    "name": "example",
-    "slug": "example",
+    "name": "multichannel-widget-example",
+    "slug": "multichannel-widget-example",
     "version": "1.0.0",
     "newArchEnabled": true,
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "qiscuscommunity.reactnativemultichannelwidget.example"
+    },
+    "ios": {
+      "bundleIdentifier": "qiscuscommunity.reactnativemultichannelwidget.example"
     }
   }
 }
