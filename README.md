@@ -28,7 +28,7 @@ For contributor and maintainer workflow (workspace setup, example app, lint/test
 
 ### Initialization
 
-In order to use `QiscusMultichannelWidge`t, you need to initialize it with your AppID (`YOUR_APP_ID`). Get more information to get AppID from [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/)
+In order to use `QiscusMultichannelWidget`, you need to initialize it with your AppID (`YOUR_APP_ID`). Get more information to get AppID from [Qiscus Multichannel Chat page](https://multichannel.qiscus.com/)
 
 ```javascript
 // Wrap your outer most component with `MultichannelWidgetProvider`
@@ -100,7 +100,7 @@ import { useCurrentUser } from '@qiscus-community/react-native-multichannel-widg
 const user = useCurrentUser();
 
 // check user value null or not
-const isLoggedIn = useMemo(() => user == null, [user]);
+const isLoggedIn = useMemo(() => user != null, [user]);
 ```
 
 ### Start Chat
@@ -112,7 +112,6 @@ widget
   .initiateChat()
   .then(() => console.log('success initiating chat'))
   .catch((e: unknown) => console.error('error while initiating chat'));
-}
 ```
 
 ### Clear User
@@ -125,7 +124,7 @@ widget.clearUser();
 
 ### Hide system message
 
-configure system message visibility by calling setShowSystemMessage(isShowing: Bool).
+Configure system message visibility by calling `setHideUIEvent()`.
 
 ```javascript
 widget.setHideUIEvent();
@@ -149,7 +148,7 @@ Channel Id is an identity for each widget channel. If you have a specific widget
 |                                     | setRoomSubTitle(IRoomSubtitleConfig.Editable, "Custom subtitle") | Set enable room sub name base on static default. |
 | setHideUIEvent                      | Show/hide system event.                                          |
 | setAvatar                           |                                                                  |
-|                                     | setAvatar(IAvatarConfig.Enable)                                  | Set enable avatar and name                       |
+|                                     | setAvatar(IAvatarConfig.Enabled)                                 | Set enable avatar and name                       |
 |                                     | setAvatar(IAvatarConfig.Disabled)                                | Set disable avatar and name                      |
 | setEnableNotification               | Set enable app notification.                                     |
 | setChannelId(channelId: channel_id) | Use this function to set your widget channel Id                  |
