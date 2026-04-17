@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 export const baseColor = '#2B3D41';
 export const bgColor = '#4C5F6B';
 export const fgColor = '#83A0A0';
+export const inputTextColor = '#163239';
 
 export function Chat() {
   const widget = useMultichannelWidget();
@@ -26,7 +27,7 @@ export function Chat() {
     widget.setSendContainerColor(fgColor);
     widget.setFieldChatBorderColor(fgColor);
     widget.setFieldChatIconColor(fgColor);
-    widget.setFieldChatTextColor(fgColor);
+    widget.setFieldChatTextColor(inputTextColor);
     widget.setAvatar(IAvatarConfig.Disabled);
     // widget.setHideUIEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps

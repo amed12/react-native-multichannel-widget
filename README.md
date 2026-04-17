@@ -160,7 +160,7 @@ Channel Id is an identity for each widget channel. If you have a specific widget
 | ------------------------------- | ------------------------------------------------------------ |
 | setNavigationColor              | Set navigation color.                                        |
 | setNavigationTitleColor         | Set room title, room subtitle, and back button border color. |
-| setSendContainerColor           | Set icon send border-color.                                  |
+| setSendContainerColor           | Set field chat background-color.                             |
 | setSendContainerBackgroundColor | Set send container background-color.                         |
 | setFieldChatBorderColor         | Set field chat border-color.                                  |
 | setFieldChatTextColor           | Set field chat text color.                                    |
