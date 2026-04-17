@@ -71,33 +71,19 @@ The example app is linked to the local library workspace:
 
 ## Architecture Notes
 
-### Picker-Agnostic File Attachment
+### Built-In File Attachment Picker
 
-The library does **not** import or depend on `react-native-document-picker` (or any picker).
-Instead, `MultichannelWidget` accepts two props from the consumer:
+The library uses `@react-native-documents/picker` directly in `src/` for both:
+- image attachment picker
+- document/file attachment picker
 
-| Prop | Type | Description |
-|---|---|---|
-| `pickImage` | `FilePicker` | Opens an image picker; called when user taps the image button |
-| `pickDocument` | `FilePicker` | Opens a file/document picker; called when user taps the document button |
-
-Both props use the exported `FilePicker` type:
-
-```ts
-type FilePicker = () => Promise<PickedFile | null | undefined>;
-
-type PickedFile = {
-  uri: string;         // local file URI
-  type: string | null; // MIME type
-  name: string | null; // filename with extension
-};
-```
+`MultichannelWidget` no longer accepts `pickImage` / `pickDocument` props from consumers.
 
 **Rules when contributing:**
-- Do **not** add `react-native-document-picker` (or any picker) back to `src/` or `peerDependencies`
-- The library must remain picker-agnostic
-- If you need a picker in the example app, import it only in `example/src/`, not in library source
-- The `FilePicker` / `PickedFile` types are exported from the library entry point so consumers can type their implementations correctly
+- Keep `@react-native-documents/picker` in `peerDependencies` with a clear compatibility range.
+- Keep image picker limited to image mime type only.
+- Keep document picker limited to non-image document/file mime types.
+- Keep behavior consistent with README usage (consumer only passes `onBack` to `MultichannelWidget`).
 
 ## Validation Commands
 

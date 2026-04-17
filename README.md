@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- ReactNative: ^0.63.4
+- React Native: 0.76+ (example app uses RN 0.76.x)
 
 ## Dependency
 
@@ -10,8 +10,7 @@
 |---|---|---|
 | `@react-native-async-storage/async-storage` | ✅ Yes | Session persistence |
 | `react-native-svg` | ✅ Yes | Icons |
-| Any file/image picker | ✅ Yes | **Bring your own** — see [File Picker](#file-picker) |
-| `react-native-document-picker` | ❌ No | One option among many |
+| `@react-native-documents/picker` | ✅ Yes | Built-in attachment picker used by widget |
 
 ## Installation
 
@@ -20,13 +19,7 @@
 yarn add @qiscus-community/react-native-multichannel-widget
 
 # Required peer dependencies
-yarn add @react-native-async-storage/async-storage react-native-svg
-
-# Add your preferred file/image picker (examples below)
-yarn add react-native-document-picker   # option A
-# — or —
-yarn add expo-document-picker           # option B
-# — or — any library that can return { uri, type, name }
+yarn add @react-native-async-storage/async-storage react-native-svg @react-native-documents/picker@10.1.7
 ```
 
 For contributor and maintainer workflow (workspace setup, example app, lint/test/release), see [CONTRIBUTING.md](./CONTRIBUTING.md).
@@ -50,65 +43,25 @@ After the initialization, you can access all the widget's functions.
 
 ## File Picker
 
-`MultichannelWidget` does **not** depend on any specific file picker library.
-You must provide two async callbacks — `pickImage` and `pickDocument` — that open
-your preferred picker and return a `PickedFile` object:
-
-```ts
-type PickedFile = {
-  uri: string;        // local file URI (use fileCopyUri when available)
-  type: string | null; // MIME type, e.g. "image/jpeg"
-  name: string | null; // filename with extension
-};
-```
-
-Pass the callbacks as props to `<MultichannelWidget>`:
+`MultichannelWidget` now uses `@react-native-documents/picker` internally.
+You do not need to pass `pickImage` / `pickDocument` props anymore.
 
 ```tsx
-import {
-  MultichannelWidget,
-  type FilePicker,
-} from '@qiscus-community/react-native-multichannel-widget';
+import { MultichannelWidget } from '@qiscus-community/react-native-multichannel-widget';
 
-// ── Example A: react-native-document-picker ──────────────────────────────────
-import Picker from 'react-native-document-picker';
-
-const pickImage: FilePicker = async () => {
-  const r = await Picker.pickSingle({ type: Picker.types.images, copyTo: 'cachesDirectory' });
-  return { uri: r.fileCopyUri ?? r.uri, type: r.type ?? null, name: r.name ?? null };
-};
-
-const pickDocument: FilePicker = async () => {
-  const r = await Picker.pickSingle({ type: Picker.types.allFiles, copyTo: 'cachesDirectory' });
-  return { uri: r.fileCopyUri ?? r.uri, type: r.type ?? null, name: r.name ?? null };
-};
-
-// ── Example B: expo-document-picker ──────────────────────────────────────────
-import * as ExpoDocPicker from 'expo-document-picker';
-
-const pickImage: FilePicker = async () => {
-  const r = await ExpoDocPicker.getDocumentAsync({ type: 'image/*', copyToCacheDirectory: true });
-  if (r.canceled) return null;
-  const asset = r.assets[0];
-  return { uri: asset.uri, type: asset.mimeType ?? null, name: asset.name ?? null };
-};
-
-const pickDocument: FilePicker = async () => {
-  const r = await ExpoDocPicker.getDocumentAsync({ type: '*/*', copyToCacheDirectory: true });
-  if (r.canceled) return null;
-  const asset = r.assets[0];
-  return { uri: asset.uri, type: asset.mimeType ?? null, name: asset.name ?? null };
-};
-
-// ── Usage ─────────────────────────────────────────────────────────────────────
-<MultichannelWidget
-  onBack={handleBack}
-  pickImage={pickImage}
-  pickDocument={pickDocument}
-/>
+<MultichannelWidget onBack={handleBack} />;
 ```
 
-> Return `null` (or let the promise reject) if the user cancels the picker — the widget handles both gracefully.
+Attachment behavior:
+- Image button opens image picker only.
+- File button opens document/file picker only (non-image mime types).
+
+Version guidance:
+- Minimum recommended version: `@react-native-documents/picker@10.1.7`
+- Supported peer range in this library: `^10.1.7 || ^11.0.0 || ^12.0.0`
+- For React Native `<0.79`, keep using `@react-native-documents/picker` `10.x`.
+- `react-native-document-picker` package name is deprecated and has been renamed.
+- `@react-native-documents/picker` is native-only, so Expo requires development build (`expo run:android` / `expo run:ios`), not Expo Go.
 
 ### Set The User
 

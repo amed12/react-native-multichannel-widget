@@ -3,7 +3,7 @@ import { PortalHost } from '@gorhom/portal';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import type { FilePicker, PickedFile } from '../types/file-picker';
+import type { PickedFile } from '../types/file-picker';
 import { AttachmentMenu } from '../components/attachment-menu';
 import { Header } from '../components/header/index';
 import { useCurrentChatRoom } from '../hooks/use-current-chatroom';
@@ -18,21 +18,9 @@ import { MessageList } from './message-list';
 
 type MultichannelWidgetProps = {
   onBack: () => void;
-  /**
-   * Async function that opens an image picker.
-   * Receive a PickedFile on success, or null/undefined when dismissed.
-   * Use any picker library (react-native-document-picker, expo-document-picker,
-   * react-native-image-picker, …) and map its result to PickedFile.
-   */
-  pickImage: FilePicker;
-  /**
-   * Async function that opens a file/document picker.
-   */
-  pickDocument: FilePicker;
 };
 
 export function MultichannelWidget(props: MultichannelWidgetProps) {
-  const { pickImage, pickDocument } = props;
   const qiscus = useQiscus();
   const { room, messages, sendMessage, loadMoreMessages } =
     useCurrentChatRoom();
@@ -252,8 +240,6 @@ export function MultichannelWidget(props: MultichannelWidgetProps) {
             onClose={() => setAttachmentMenuVisible(false)}
             onImageSelected={onImageSelected}
             onDocumentSelected={onDocumentSelected}
-            pickImage={pickImage}
-            pickDocument={pickDocument}
           />
         )}
       </View>

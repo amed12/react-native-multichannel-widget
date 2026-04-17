@@ -2951,8 +2951,8 @@ __metadata:
     "@babel/core": ^7.20.0
     "@expo/metro-runtime": ~4.0.1
     "@react-native-async-storage/async-storage": 1.23.1
+    "@react-native-documents/picker": 10.1.7
     expo: ~52.0.37
-    expo-document-picker: ~13.0.3
     expo-status-bar: ~2.0.1
     react: 18.3.1
     react-dom: 18.3.1
@@ -2970,6 +2970,7 @@ __metadata:
     "@commitlint/config-conventional": ^17.0.2
     "@gorhom/portal": ^1.0.14
     "@react-native-async-storage/async-storage": ^2.1.1
+    "@react-native-documents/picker": 10.1.7
     "@react-native/eslint-config": ^0.73.1
     "@release-it/conventional-changelog": latest
     "@types/invariant": ^2.2.37
@@ -2998,6 +2999,7 @@ __metadata:
     typescript: ^5.2.2
   peerDependencies:
     "@react-native-async-storage/async-storage": "*"
+    "@react-native-documents/picker": ^10.1.7 || ^11.0.0 || ^12.0.0
     react: "*"
     react-native: "*"
     react-native-svg: "*"
@@ -3023,6 +3025,16 @@ __metadata:
   peerDependencies:
     react-native: ^0.0.0-0 || >=0.65 <1.0
   checksum: efbb9c801fb7eecfad1568d6a5e9d247db420b8ba8f1789d5b783e679432567a53cf54c7e7b5e6f315276f33d1df297253549e0cefef2e683539df346d2a1f2d
+  languageName: node
+  linkType: hard
+
+"@react-native-documents/picker@npm:10.1.7":
+  version: 10.1.7
+  resolution: "@react-native-documents/picker@npm:10.1.7"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 27844133276e14f4e9c92c34ee008af8101749233686121001f7b6ccbad76ca0afb33845a328b23011cb36c6e98921aa42c58fcf23d79b3751d62308e4a97ad6
   languageName: node
   linkType: hard
 
@@ -6944,15 +6956,6 @@ __metadata:
     expo: "*"
     react-native: "*"
   checksum: 493e18f8ea2c49efd69aae37b756ede1c37ecc29ac9bd5c23cb2ca88dbc57109c7f915196bcfaab71ceca2141e9a9806a685f8ac787fa206af7f1391be2e09f2
-  languageName: node
-  linkType: hard
-
-"expo-document-picker@npm:~13.0.3":
-  version: 13.0.3
-  resolution: "expo-document-picker@npm:13.0.3"
-  peerDependencies:
-    expo: "*"
-  checksum: 26263753c4a6d91da705e578804d97809087e6251a03395b4f3d5e0c9230ebba020d413996f0aacb23afff1ad42f2cbc784f0d085bbc4e034418e09a7839c56d
   languageName: node
   linkType: hard
 

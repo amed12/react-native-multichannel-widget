@@ -29,7 +29,7 @@ export {
 } from './hooks/index';
 export { MultichannelWidget } from './screens/multichannel-widget';
 export { IAvatarConfig, IRoomSubtitleConfig } from './types';
-export type { FilePicker, PickedFile } from './types/file-picker';
+export type { PickedFile } from './types/file-picker';
 
 const WidgetContext = React.createContext(undefined);
 
