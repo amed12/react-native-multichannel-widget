@@ -9,6 +9,7 @@ import type { Message } from '../types';
 import { MessageItemCarousel } from './message-item/carousel';
 import { MessageItemFile } from './message-item/file';
 import { MessageItemImage } from './message-item/image';
+import { MessageItemLoading } from './message-item/loading';
 import { MessageItemSystemEvent } from './message-item/system-event';
 import { MessageItemText } from './message-item/text';
 
@@ -46,6 +47,10 @@ export function MessageList(props: MessageListProps) {
 
     if (item.type === 'carousel') {
       return <MessageItemCarousel item={item} />;
+    }
+
+    if (item.type === 'loading_placeholder') {
+      return <MessageItemLoading item={item} />;
     }
 
     if (item.type === 'system_event') {
