@@ -7,6 +7,7 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { baseColorThemeAtom, emptyTextColorThemeAtom } from '../state';
 import type { Message } from '../types';
 import { MessageItemCarousel } from './message-item/carousel';
+import { MessageItemFile } from './message-item/file';
 import { MessageItemImage } from './message-item/image';
 import { MessageItemSystemEvent } from './message-item/system-event';
 import { MessageItemText } from './message-item/text';
@@ -35,6 +36,9 @@ export function MessageList(props: MessageListProps) {
   const renderItem = useCallback((item: Message) => {
     if (isImage(item)) {
       return <MessageItemImage item={item} />;
+    }
+    if (isFileAttachment(item)) {
+      return <MessageItemFile item={item} />;
     }
     // if (isVideo(item)) {
     //   return <MessageItemVideo item={item} />;
@@ -108,4 +112,9 @@ function isImage(item: Message) {
   const url = item.text.replace(reAttachment, '').trim();
   const ext = url.match(reExt)?.[1];
   return !!String(ext).match(/jpe?g|png|gif/i);
+}
+
+function isFileAttachment(item: Message) {
+  if (item.type === 'file_attachment') return true;
+  return /\[file]/i.test(item.text) || /\[\/file]/i.test(item.text);
 }
