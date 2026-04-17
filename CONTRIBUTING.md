@@ -69,6 +69,36 @@ The example app is linked to the local library workspace:
 - JavaScript/TypeScript changes are reflected without rebuilding native app
 - Native module changes require rebuilding the app target
 
+## Architecture Notes
+
+### Picker-Agnostic File Attachment
+
+The library does **not** import or depend on `react-native-document-picker` (or any picker).
+Instead, `MultichannelWidget` accepts two props from the consumer:
+
+| Prop | Type | Description |
+|---|---|---|
+| `pickImage` | `FilePicker` | Opens an image picker; called when user taps the image button |
+| `pickDocument` | `FilePicker` | Opens a file/document picker; called when user taps the document button |
+
+Both props use the exported `FilePicker` type:
+
+```ts
+type FilePicker = () => Promise<PickedFile | null | undefined>;
+
+type PickedFile = {
+  uri: string;         // local file URI
+  type: string | null; // MIME type
+  name: string | null; // filename with extension
+};
+```
+
+**Rules when contributing:**
+- Do **not** add `react-native-document-picker` (or any picker) back to `src/` or `peerDependencies`
+- The library must remain picker-agnostic
+- If you need a picker in the example app, import it only in `example/src/`, not in library source
+- The `FilePicker` / `PickedFile` types are exported from the library entry point so consumers can type their implementations correctly
+
 ## Validation Commands
 
 Run before opening a PR:

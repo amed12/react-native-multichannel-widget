@@ -6,19 +6,27 @@
 
 ## Dependency
 
-- @react-native-async-storage/async-storage: ^2.1.1
-- react-native-document-picker: ^9.3.1
-- react-native-svg: ^15.11.2
-
+| Package | Required | Notes |
+|---|---|---|
+| `@react-native-async-storage/async-storage` | ✅ Yes | Session persistence |
+| `react-native-svg` | ✅ Yes | Icons |
+| Any file/image picker | ✅ Yes | **Bring your own** — see [File Picker](#file-picker) |
+| `react-native-document-picker` | ❌ No | One option among many |
 
 ## Installation
 
-```
+```sh
 # Qiscus Multichannel main package
 yarn add @qiscus-community/react-native-multichannel-widget
 
-# Dependencies required for qiscus multichannel
-yarn add @react-native-async-storage/async-storage react-native-document-picker
+# Required peer dependencies
+yarn add @react-native-async-storage/async-storage react-native-svg
+
+# Add your preferred file/image picker (examples below)
+yarn add react-native-document-picker   # option A
+# — or —
+yarn add expo-document-picker           # option B
+# — or — any library that can return { uri, type, name }
 ```
 
 For contributor and maintainer workflow (workspace setup, example app, lint/test/release), see [CONTRIBUTING.md](./CONTRIBUTING.md).
@@ -39,6 +47,68 @@ import { MultichannelWidgetProvider } from '@qiscus-community/react-native-multi
 ```
 
 After the initialization, you can access all the widget's functions.
+
+## File Picker
+
+`MultichannelWidget` does **not** depend on any specific file picker library.
+You must provide two async callbacks — `pickImage` and `pickDocument` — that open
+your preferred picker and return a `PickedFile` object:
+
+```ts
+type PickedFile = {
+  uri: string;        // local file URI (use fileCopyUri when available)
+  type: string | null; // MIME type, e.g. "image/jpeg"
+  name: string | null; // filename with extension
+};
+```
+
+Pass the callbacks as props to `<MultichannelWidget>`:
+
+```tsx
+import {
+  MultichannelWidget,
+  type FilePicker,
+} from '@qiscus-community/react-native-multichannel-widget';
+
+// ── Example A: react-native-document-picker ──────────────────────────────────
+import Picker from 'react-native-document-picker';
+
+const pickImage: FilePicker = async () => {
+  const r = await Picker.pickSingle({ type: Picker.types.images, copyTo: 'cachesDirectory' });
+  return { uri: r.fileCopyUri ?? r.uri, type: r.type ?? null, name: r.name ?? null };
+};
+
+const pickDocument: FilePicker = async () => {
+  const r = await Picker.pickSingle({ type: Picker.types.allFiles, copyTo: 'cachesDirectory' });
+  return { uri: r.fileCopyUri ?? r.uri, type: r.type ?? null, name: r.name ?? null };
+};
+
+// ── Example B: expo-document-picker ──────────────────────────────────────────
+import * as ExpoDocPicker from 'expo-document-picker';
+
+const pickImage: FilePicker = async () => {
+  const r = await ExpoDocPicker.getDocumentAsync({ type: 'image/*', copyToCacheDirectory: true });
+  if (r.canceled) return null;
+  const asset = r.assets[0];
+  return { uri: asset.uri, type: asset.mimeType ?? null, name: asset.name ?? null };
+};
+
+const pickDocument: FilePicker = async () => {
+  const r = await ExpoDocPicker.getDocumentAsync({ type: '*/*', copyToCacheDirectory: true });
+  if (r.canceled) return null;
+  const asset = r.assets[0];
+  return { uri: asset.uri, type: asset.mimeType ?? null, name: asset.name ?? null };
+};
+
+// ── Usage ─────────────────────────────────────────────────────────────────────
+<MultichannelWidget
+  onBack={handleBack}
+  pickImage={pickImage}
+  pickDocument={pickDocument}
+/>
+```
+
+> Return `null` (or let the promise reject) if the user cancels the picker — the widget handles both gracefully.
 
 ### Set The User
 
